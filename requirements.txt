@@ -1,0 +1,12 @@
+# Function dependencies, for example:
+# package>=version
+datetime
+chardet
+bs4
+requests
+numpy
+pandas
+pandas-gbq
+bigquery
+lxml
+html5lib

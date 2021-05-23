@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/root
+    environment:
+      - PYTHONPATH=/root/src
+      - BIGQUERY_TABLE_PATH = 
+      - 

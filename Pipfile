@@ -13,6 +13,8 @@ bigquery = "*"
 lxml = "*"
 html5lib = "*"
 DateTime = "*"
+google-auth = "*"
+google = "*"
 
 [dev-packages]
 

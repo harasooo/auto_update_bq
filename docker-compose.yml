@@ -9,4 +9,7 @@ services:
       - .:/root
     environment:
       - PYTHONPATH=/root/src
-      - BIGQUERY_CREDENTIALS_PATH = keiba-ds-project-857126484f5b.json
+      - ENV=LOCAL
+      - PROJECT_ID=keiba-ds
+      - TABLE_ID=test.test
+      - KEY_PATH=keiba-ds-project-857126484f5b.json

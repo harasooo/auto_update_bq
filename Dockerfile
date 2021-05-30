@@ -5,8 +5,6 @@ RUN apt-get update -y --fix-missing && \
   make \
   git
 
-RUN mkdir secrets
-
 WORKDIR /root
 RUN pip install --upgrade pip && pip --version
 RUN pip install pipenv && pipenv --version

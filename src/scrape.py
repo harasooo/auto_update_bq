@@ -38,7 +38,7 @@ def get_exist_race_list(client):
 
 def get_race_list() -> List[str]:
     end_date = datetime.date.today()
-    start_date = end_date - timedelta(days=10)
+    start_date = end_date - timedelta(days=30)
     race_list = []
     while start_date < end_date:
         str_date = str(start_date).replace('-', '')
@@ -107,6 +107,11 @@ def write_bq(race_list: List[str], exist_race_list: List[str], dataset_id: str,
         concat_race_df = pd.concat(df_list).astype(
             {'race_id': 'int64', 'impost': 'float'})
         # concat_odds_df = pd.concat(odds_df_list)
-        concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
-                              if_exists='append',
-                              table_schema=schema, credentials=credentials)
+        if credentials == "default":
+            concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
+                                  if_exists='append',
+                                  table_schema=schema)
+        else:
+            concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
+                                  if_exists='append',
+                                  table_schema=schema, credentials=credentials)

@@ -10,6 +10,7 @@ services:
     environment:
       - PROJECT_ID=${PROJECT_ID}
       - TABLE_ID=${TABLE_ID}
+      - DATASET_ID=${DATASET_ID}
       - MY_KEY_PATH=${MY_KEY_PATH}
       - ENV=${ENV}
       - PYTHONPATH=${PYTHONPATH}

@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+chardet = "*"
+bs4 = "*"
+requests = "*"
+pandas = "*"
+pandas-gbq = "*"
+bigquery = "*"
+lxml = "*"
+html5lib = "*"
+DateTime = "*"
+google-auth = "*"
+google = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

@@ -104,11 +104,14 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.envrc
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+keiba-ds-project-0c441813d40b.json
+keiba-ds-project.json
 
 # Spyder project settings
 .spyderproject

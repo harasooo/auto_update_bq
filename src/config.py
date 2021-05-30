@@ -21,6 +21,14 @@ if os.getenv("ENV") == "local":
         json_acct_info)
     CREDENTIALS = credentials.with_scopes(
         ['https://www.googleapis.com/auth/cloud-platform'])
-    PROJECT_ID = os.getenv("PROJECT_ID")
-    TABLE_ID = os.getenv("TABLE_ID")
+    PROJECT_ID = str(os.getenv("PROJECT_ID"))
+    TABLE_ID = str(os.getenv("TABLE_ID"))
     CLIENT = bigquery.Client(credentials=credentials, project=PROJECT_ID)
+
+    dataset = CLIENT.get_dataset(str(os.getenv("DATASET_ID")))
+    tables = CLIENT.list_tables(dataset)
+    if tables:
+        for obj in tables:
+            if str(obj.reference) == ".".join([PROJECT_ID, TABLE_ID]):
+                table = CLIENT.get_table(obj.reference)
+                SCHEMA = table._properties.get("schema").get('fields')

@@ -3,7 +3,9 @@ FROM python:3.8.7-slim
 RUN apt-get update -y --fix-missing && \
   apt-get -y install \
   make \
-  git 
+  git
+
+RUN mkdir secrets
 
 WORKDIR /root
 RUN pip install --upgrade pip && pip --version

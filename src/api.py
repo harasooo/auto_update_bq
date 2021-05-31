@@ -5,12 +5,12 @@ from main import main
 app = FastAPI()
 
 
-@app.get("/ping")
+@app.get("/")
 def read_root():
     return {"status": "OK"}
 
 
-@app.post("/scrape")
+@app.post("/")
 async def create_pred():
     main()
     return {"status": "OK"}

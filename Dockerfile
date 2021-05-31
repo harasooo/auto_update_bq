@@ -13,4 +13,5 @@ COPY Pipfile Pipfile.lock ./
 RUN pipenv install --system
 
 COPY . .
-CMD [ "python", "src/main.py"]
+EXPOSE 8080
+CMD ["/bin/sh", "-c", "exec /usr/local/bin/uvicorn --host 0.0.0.0 --port $PORT api:app"]

@@ -22,7 +22,7 @@ def get_exist_race_list(client, table):
 
 def get_race_list() -> List[str]:
     end_date = datetime.date.today()
-    start_date = end_date - timedelta(days=30)
+    start_date = end_date - timedelta(days=10)
     race_list = []
     while start_date < end_date:
         str_date = str(start_date).replace('-', '')

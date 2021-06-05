@@ -1,2 +1,2 @@
 test:
-	docker-compose run --rm api bash -c "pytest"
+	docker-compose run --rm api bash -c "pytest" --build

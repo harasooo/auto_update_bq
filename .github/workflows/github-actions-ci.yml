@@ -14,6 +14,7 @@ jobs:
       TEST_START_DATE: ${{secrets.TEST_START_DATE}}
       TEST_END_DATE: ${{secrets.TEST_END_DATE}}
       TEST_DELETE_DATE: ${{secrets.TEST_DELETE_DATE}}
+      MY_KEY_PATH: ${{secrets.MY_KEY_PATH}}
       ENV: CI
       PORT: 8080
       PYTHONPATH: /root/src

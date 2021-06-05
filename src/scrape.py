@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Optional
 import re
 import requests
 import pandas as pd
@@ -7,38 +7,27 @@ import datetime
 from datetime import timedelta
 
 
-def get_exist_race_list(client):
+def get_exist_race_list(client, table):
 
-    query_text = """
-  select
-  DISTINCT(race_id)
-  FROM test.test
-  WHERE
-  cast(
-      left(
-          cast(
-              race_id as string
-              ),
-              8
-          ) AS INT64
-      ) >
-  cast(
-      replace(
-          CAST(DATE_SUB(CURRENT_DATE('Asia/Tokyo'), INTERVAL 5 DAY) AS STRING),
-          "-",
-          "")
-      as INT64
-  )
-  """
+    query_text = f"""
+    select
+    DISTINCT(race_id)
+    FROM {table}
+    """
 
     exist_race_list = client.query(query_text).to_dataframe()[
-        "race_id"].to_list()
+        "race_id"].astype(str).to_list()
     return exist_race_list
 
 
-def get_race_list() -> List[str]:
-    end_date = datetime.date.today()
-    start_date = end_date - timedelta(days=30)
+def get_race_list(env: str = "", test_start_date: datetime.date = datetime.date.today(),
+                  test_end_date: datetime.date = datetime.date.today()) -> List[str]:
+    if env == "test":
+        start_date = test_start_date
+        end_date = test_end_date
+    else:
+        end_date = datetime.date.today()
+        start_date = end_date - timedelta(days=10)
     race_list = []
     while start_date < end_date:
         str_date = str(start_date).replace('-', '')
@@ -51,8 +40,8 @@ def get_race_list() -> List[str]:
     return race_list
 
 
-def write_bq(race_list: List[str], exist_race_list: List[str], dataset_id: str,
-             project_id: str, credentials: Any, schema: List[Dict[str, str]]):
+def get_table_list(race_list: List[str],
+                   exist_race_list: List[str]) -> Optional[pd.DataFrame]:
 
     using_cols = ['race_id', '着順', '枠番', '馬番', '馬名', '性齢', '斤量', '騎手', 'タイム', '着差', '通過',
                   '上り', '単勝', '人気', '馬体重', '調教師', '馬主',
@@ -65,9 +54,8 @@ def write_bq(race_list: List[str], exist_race_list: List[str], dataset_id: str,
                 "race_round", "date", "race_track"]
 
     df_list = []
-    odds_df_list = []
     for race_id in race_list:
-        if int(re.sub(r'\D', '', race_id)) not in exist_race_list:
+        if re.sub(r'\D', '', race_id) not in exist_race_list:
             race_url = f"https://db.netkeiba.com{race_id}"
             race_page_list = BeautifulSoup(requests.get(
                 race_url).content, 'html')
@@ -95,23 +83,22 @@ def write_bq(race_list: List[str], exist_race_list: List[str], dataset_id: str,
                     "a", class_="active")[0].get_text()
                 df.columns = col_name
                 df_list.append(df)
-
-                odds_df_1 = pd.read_html(str(table_list[1]))[0]
-                odds_df_2 = pd.read_html(str(table_list[2]))[0]
-                odds_df = pd.concat([odds_df_1, odds_df_2])
-                odds_df["race_id"] = re.sub(r'\D', '', race_id)
-                odds_df.columns = ["kind", "horse_number",
-                                   "rate", "popular_rank", "race_id"]
-                odds_df_list.append(odds_df)
     if len(df_list) > 0:
         concat_race_df = pd.concat(df_list).astype(
             {'race_id': 'int64', 'impost': 'float'})
-        # concat_odds_df = pd.concat(odds_df_list)
-        if credentials == "default":
-            concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
-                                  if_exists='append',
-                                  table_schema=schema)
-        else:
-            concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
-                                  if_exists='append',
-                                  table_schema=schema, credentials=credentials)
+        return concat_race_df
+    else:
+        return None
+
+
+def write_bq(concat_race_df: pd.DataFrame, dataset_id: str,
+             project_id: str, credentials: Any, schema: List[Dict[str, str]]):
+
+    if credentials == "default":
+        concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
+                              if_exists='append',
+                              table_schema=schema)
+    else:
+        concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
+                              if_exists='append',
+                              table_schema=schema, credentials=credentials)

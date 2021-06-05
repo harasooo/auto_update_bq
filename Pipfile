@@ -17,6 +17,7 @@ google-auth = "*"
 google = "*"
 fastapi = "*"
 uvicorn = "*"
+pytest = "*"
 
 [dev-packages]
 

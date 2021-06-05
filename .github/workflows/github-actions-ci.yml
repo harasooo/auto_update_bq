@@ -1,0 +1,36 @@
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: ${{secrets.PROJECT_ID}}
+      TABLE_ID: ${{secrets.TABLE_ID}}
+      DATASET_ID: ${{secrets.DATASET_ID}}
+      TEST_TABLE_ID: ${{secrets.TEST_TABLE_ID}}
+      TEST_DATASET_ID: ${{secrets.TEST_DATASET_ID}}
+      TEST_YEAR: ${{secrets.TEST_YEAR}}
+      TEST_MONTH: ${{secrets.TEST_MONTH}}
+      TEST_START_DATE: ${{secrets.TEST_START_DATE}}
+      TEST_END_DATE: ${{secrets.TEST_END_DATE}}
+      TEST_DELETE_DATE: ${{secrets.TEST_DELETE_DATE}}
+      MY_KEY_PATH: ${{secrets.MY_KEY_PATH}}
+      ENV: CI
+      PORT: 8080
+      PYTHONPATH: /root/src
+      CREDENTIAL_NOTATION: ${{secrets.CREDENTIAL_NOTATION}}
+      GCP_CREDENTIAL_TYPE: ${{secrets.GCP_CREDENTIAL_TYPE}}
+      GCP_CREDENTIAL_PROJECT_ID: ${{secrets.GCP_CREDENTIAL_PROJECT_ID}}
+      GCP_CREDENTIAL_PRIVATE_KEY_ID: ${{secrets.GCP_CREDENTIAL_PRIVATE_KEY_ID}}
+      GCP_CREDENTIAL_PRIVATE_KEY: ${{secrets.GCP_CREDENTIAL_PRIVATE_KEY}}
+      GCP_CREDENTIAL_CLIENT_EMAIL: ${{secrets.GCP_CREDENTIAL_CLIENT_EMAIL}}
+      GCP_CREDENTIAL_CLIENT_ID: ${{secrets.GCP_CREDENTIAL_CLIENT_ID}}
+      GCP_CREDENTIAL_AUTH_URI: ${{secrets.GCP_CREDENTIAL_AUTH_URI}}
+      GCP_CREDENTIAL_TOKEN_URI: ${{secrets.GCP_CREDENTIAL_TOKEN_URI}}
+      GCP_CREDENTIAL_AUTH_PROVIDER_X509_CERT_URL: ${{secrets.GCP_CREDENTIAL_AUTH_PROVIDER_X509_CERT_URL}}
+      GCP_CREDENTIAL_CLIENT_X509_CERT_URL: ${{secrets.PROJECT_ID}}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: test
+        run: make test

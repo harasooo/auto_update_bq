@@ -5,6 +5,7 @@ import requests
 import pandas as pd
 import datetime
 from datetime import timedelta
+from logger import scrape_logger
 
 
 def get_exist_race_list(client, table):
@@ -17,6 +18,7 @@ def get_exist_race_list(client, table):
 
     exist_race_list = client.query(query_text).to_dataframe()[
         "race_id"].astype(str).to_list()
+    scrape_logger.info(f"got {len(exist_race_list)} exist_race_lists...")
     return exist_race_list
 
 
@@ -37,6 +39,7 @@ def get_race_list(env: str = "", test_start_date: datetime.date = datetime.date.
         for index in index_list:
             race_list.append(index.get('href'))
         start_date = start_date + datetime.timedelta(days=1)
+    scrape_logger.info(f"got {len(race_list)} race_lists...")
     return race_list
 
 
@@ -83,6 +86,7 @@ def get_table_list(race_list: List[str],
                     "a", class_="active")[0].get_text()
                 df.columns = col_name
                 df_list.append(df)
+    scrape_logger.info(f"got {len(df_list)} df_lists ...")
     if len(df_list) > 0:
         concat_race_df = pd.concat(df_list).astype(
             {'race_id': 'int64', 'impost': 'float'})
@@ -94,6 +98,7 @@ def get_table_list(race_list: List[str],
 def write_bq(concat_race_df: pd.DataFrame, dataset_id: str,
              project_id: str, credentials: Any, schema: List[Dict[str, str]]):
 
+    scrape_logger.info(f"writing {len(concat_race_df)} raws to bq ...")
     if credentials == "default":
         concat_race_df.to_gbq(destination_table=dataset_id, project_id=project_id,
                               if_exists='append',

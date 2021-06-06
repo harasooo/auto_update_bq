@@ -18,6 +18,7 @@ def get_exist_race_list(client, table):
 
     exist_race_list = client.query(query_text).to_dataframe()[
         "race_id"].astype(str).to_list()
+    scrape_logger.info(f"got {len(exist_race_list)} exist_race_lists...")
     return exist_race_list
 
 
@@ -38,6 +39,7 @@ def get_race_list(env: str = "", test_start_date: datetime.date = datetime.date.
         for index in index_list:
             race_list.append(index.get('href'))
         start_date = start_date + datetime.timedelta(days=1)
+    scrape_logger.info(f"got {len(race_list)} race_lists...")
     return race_list
 
 

@@ -71,5 +71,3 @@ def test_race_list():
     bq_diff = set(id_from_bq) ^ (
         test_race_set - set(test_exist_race_list))
     assert not bq_diff
-
-    delete_bq_race_id(CLIENT, TEST_TABLE_ID, TEST_DELETE_DATE)

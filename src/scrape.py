@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from config import TIMEDELTA
-from typing import List, Any, Dict, Optional
+from typing import List, Any, Dict, Union
 import re
 import requests
 import pandas as pd
@@ -51,7 +51,7 @@ def get_race_list(
 
 def get_table_list(
     race_list: List[str], exist_race_list: List[str]
-) -> Optional[pd.DataFrame]:
+) -> Union[pd.DataFrame, List]:
 
     using_cols = [
         "race_id",
@@ -166,7 +166,8 @@ def get_table_list(
         concat_race_df = pd.concat(df_list)
         return concat_race_df
     else:
-        return None
+        scrape_logger.info(f"writing 0 raws to bq ...")
+        return []
 
 
 def write_bq(

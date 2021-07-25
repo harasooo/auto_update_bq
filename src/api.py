@@ -13,4 +13,4 @@ def read_root():
 @app.post("/")
 async def create_pred():
     main()
-    return {"status": "OK"}
+    return {"status": "OK!"}

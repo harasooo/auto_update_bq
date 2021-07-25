@@ -163,9 +163,7 @@ def get_table_list(
                 df_list.append(df)
     scrape_logger.info(f"got {len(df_list)} df_lists ...")
     if len(df_list) > 0:
-        concat_race_df = pd.concat(df_list).astype(
-            {"race_id": "int64", "impost": "float"}
-        )
+        concat_race_df = pd.concat(df_list)
         return concat_race_df
     else:
         return None

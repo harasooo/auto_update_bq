@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from config import TIMEDELTA
 from typing import List, Any, Dict, Optional
 import re
 import requests
@@ -33,7 +34,7 @@ def get_race_list(
         end_date = test_end_date
     else:
         end_date = datetime.date.today()
-        start_date = end_date - timedelta(days=30)
+        start_date = end_date - timedelta(days=TIMEDELTA)
     race_list = []
     while start_date < end_date:
         str_date = str(start_date).replace("-", "")
@@ -162,7 +163,9 @@ def get_table_list(
                 df_list.append(df)
     scrape_logger.info(f"got {len(df_list)} df_lists ...")
     if len(df_list) > 0:
-        concat_race_df = pd.concat(df_list)
+        concat_race_df = pd.concat(df_list).astype(
+            {"race_id": "int64", "impost": "float"}
+        )
         return concat_race_df
     else:
         return None

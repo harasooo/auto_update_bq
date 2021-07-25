@@ -39,6 +39,7 @@ def client_credentials_from_envs() -> Any:
 
 PROJECT_ID = str(os.getenv("PROJECT_ID"))
 TABLE_ID = str(os.getenv("TABLE_ID"))
+TIMEDELTA = int((os.getenv("TIMEDELTA"))
 if os.getenv("ENV") == "GCP":
     CLIENT = bigquery.Client()
     CREDENTIALS = "default"

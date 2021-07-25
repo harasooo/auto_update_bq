@@ -10,6 +10,7 @@ services:
     environment:
       - PROJECT_ID=${PROJECT_ID}
       - TABLE_ID=${TABLE_ID}
+      - TIMEDELTA=${TIMEDELTA}
       - DATASET_ID=${DATASET_ID}
       - TEST_TABLE_ID=${TEST_TABLE_ID}
       - TEST_DATASET_ID=${TEST_DATASET_ID}

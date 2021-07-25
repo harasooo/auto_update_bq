@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_ID: ${{secrets.PROJECT_ID}}
+      TIMEDELTA: ${{secrets.TIMEDELTA}}
       TABLE_ID: ${{secrets.TABLE_ID}}
       DATASET_ID: ${{secrets.DATASET_ID}}
       TEST_TABLE_ID: ${{secrets.TEST_TABLE_ID}}
